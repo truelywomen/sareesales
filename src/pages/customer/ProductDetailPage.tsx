@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, ArrowLeft, Sparkles, CheckCircle2, ShieldCheck, Truck, Plus, Minus, Heart, Star, Share2, ChevronDown, ChevronUp } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, Sparkles, CheckCircle2, ShieldCheck, Truck, Plus, Minus, Heart, Share2, ChevronDown, ChevronUp } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { formatPrice } from '../../utils/formatters';
 import { EmptyState } from '../../components/common/EmptyState';
@@ -114,17 +114,6 @@ export const ProductDetailPage: React.FC = () => {
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-brand-burgundy mt-1">
                 {saree.name}
               </h1>
-
-              {/* Rating & Reviews */}
-              <div className="flex items-center gap-2 mt-2">
-                <div className="flex items-center gap-1 bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200 text-amber-800 text-xs font-bold">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  <span>{saree.rating || 4.9}</span>
-                </div>
-                <span className="text-xs text-brand-muted">
-                  ({saree.reviewsCount || 48} verified customer reviews)
-                </span>
-              </div>
 
               {/* Price & Discounts */}
               <div className="flex items-baseline gap-3 mt-4">

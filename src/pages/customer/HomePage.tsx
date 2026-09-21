@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight, ShieldCheck, Truck, Award, Heart, Star, CheckCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Truck, Award, Heart } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { ProductCard } from '../../components/customer/ProductCard';
 import { BRAND_INFO } from '../../config/authConfig';
@@ -29,30 +29,6 @@ const CATEGORIES_SHOWCASE = [
     desc: 'Organic Linen, Cotton Jamdani & Chanderi',
     image: 'https://images.unsplash.com/photo-1610030469668-966964032d84?auto=format&fit=crop&w=600&q=80',
     category: 'Traditional'
-  }
-];
-
-const TESTIMONIALS = [
-  {
-    name: 'Ananya Deshmukh',
-    city: 'Mumbai',
-    comment: 'The Kanchipuram silk saree I ordered for my sister’s wedding was breathtaking! Pure luxury weave and delivered in just 4 days.',
-    rating: 5,
-    saree: 'Pink Kanchipuram Silk Saree'
-  },
-  {
-    name: 'Pooja Iyer',
-    city: 'Bengaluru',
-    comment: 'TrueWomen has the most authentic handloom collection online. The fabric is soft, genuine silk, and the zari shines subtly.',
-    rating: 5,
-    saree: 'Royal Red Banarasi Brocade'
-  },
-  {
-    name: 'Meera Nambiar',
-    city: 'Chennai',
-    comment: 'Customer support reached out immediately after order placement. The tracking timeline was very smooth and accurate.',
-    rating: 5,
-    saree: 'Emerald Green Organza Saree'
   }
 ];
 
@@ -259,51 +235,6 @@ export const HomePage: React.FC = () => {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CUSTOMER REVIEWS / TESTIMONIALS SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center space-y-2 mb-10">
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-gold bg-brand-lightGold/60 px-3 py-1 rounded-full border border-brand-gold/30">
-            Customer Love
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-brand-burgundy">
-            Trusted by Thousands of Women
-          </h2>
-          <p className="text-sm text-brand-charcoal/70 max-w-xl mx-auto">
-            Read verified customer experiences from saree connoisseurs across India.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {TESTIMONIALS.map((t, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-2xl p-6 border border-brand-gold/25 shadow-card space-y-4 flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-1">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <p className="text-xs sm:text-sm text-brand-charcoal/80 leading-relaxed italic">
-                  "{t.comment}"
-                </p>
-              </div>
-
-              <div className="pt-3 border-t border-brand-gold/15 flex items-center justify-between text-xs">
-                <div>
-                  <p className="font-bold text-brand-burgundy">{t.name}</p>
-                  <p className="text-[11px] text-brand-muted">{t.city}, India</p>
-                </div>
-                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  Verified Buyer
-                </span>
-              </div>
-            </div>
-          ))}
         </div>
       </section>
 

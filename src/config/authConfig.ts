@@ -1,4 +1,4 @@
-export const OWNER_PASSWORD = "onlywomen2026";
+﻿export const OWNER_PASSWORD = "Truelywomen";
 
 export const STORAGE_KEYS = {
   SAREES: "truewomen_sarees",

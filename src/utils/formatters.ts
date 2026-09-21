@@ -1,4 +1,4 @@
-/**
+﻿/**
   Format currency and generate order IDs
  */
 
@@ -13,5 +13,5 @@ export const formatPrice = (amount: number): string => {
 export const generateOrderId = (existingOrdersCount: number): string => {
   const nextNum = existingOrdersCount + 1;
   const padded = String(nextNum).padStart(4, '0');
-  return `OW2026${padded}`;
+  return `TW2026${padded}`;
 };

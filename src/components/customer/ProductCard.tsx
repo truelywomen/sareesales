@@ -1,6 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Eye, Sparkles, Heart, Star } from 'lucide-react';
+import { ShoppingBag, Eye, Sparkles, Heart } from 'lucide-react';
 import { Saree } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { useShop } from '../../context/ShopContext';
@@ -102,10 +102,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ saree }) => {
               <span className="uppercase tracking-wider text-[11px] font-semibold text-brand-gold">
                 {saree.category}
               </span>
-              <div className="flex items-center gap-1 text-[11px] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/60 text-amber-800 font-bold">
-                <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                <span>{saree.rating || 4.9}</span>
-              </div>
+              <span className="text-xs text-brand-charcoal font-medium">
+                {saree.color}
+              </span>
             </div>
 
             {/* Saree Name */}

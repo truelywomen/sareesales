@@ -1,5 +1,5 @@
-﻿import React, { useState } from 'react';
-import { X, ShoppingBag, Heart, Sparkles, CheckCircle2, Truck, Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, ShoppingBag, Heart, Sparkles, CheckCircle2, Truck } from 'lucide-react';
 import { Saree } from '../../types';
 import { formatPrice } from '../../utils/formatters';
 import { useShop } from '../../context/ShopContext';
@@ -67,17 +67,6 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ saree, isOpen, o
               <h2 className="font-serif text-2xl font-bold text-brand-burgundy leading-snug">
                 {saree.name}
               </h2>
-
-              {/* Rating */}
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1 bg-amber-50 px-2.5 py-0.5 rounded-md border border-amber-200 text-amber-700 text-xs font-bold">
-                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                  <span>{saree.rating || 4.9}</span>
-                </div>
-                <span className="text-xs text-brand-muted">
-                  ({saree.reviewsCount || 48} customer reviews)
-                </span>
-              </div>
 
               {/* Price & Discount */}
               <div className="flex items-baseline gap-3 pt-1">
