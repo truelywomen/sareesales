@@ -361,7 +361,7 @@ export const CheckoutPage: React.FC = () => {
                 <div className="relative overflow-hidden h-5 bg-black/20 flex items-center">
                   <p className="whitespace-nowrap text-[10px] font-semibold text-brand-gold/80 tracking-widest px-3"
                     style={{ animation: 'tickerScroll 8s linear infinite' }}>
-                    📦 &nbsp; We'll reach out soon &nbsp;•&nbsp; Thank you for shopping with ONLY WOMEN &nbsp;•&nbsp; Estimated delivery in 7 days &nbsp;•&nbsp; 📦
+                    📦 &nbsp; We'll reach out soon &nbsp;•&nbsp; Thank you for shopping with TrueWomen &nbsp;•&nbsp; Estimated delivery in 7 days &nbsp;•&nbsp; 📦
                   </p>
                 </div>
               </div>

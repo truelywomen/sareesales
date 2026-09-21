@@ -1,19 +1,23 @@
-export type SareeCategory = 'Kanchipuram' | 'Banarasi' | 'Party Wear' | 'Traditional' | 'Bandhani' | 'Chanderi';
+export type SareeCategory = 'Kanchipuram' | 'Banarasi' | 'Party Wear' | 'Traditional' | 'Bandhani' | 'Chanderi' | 'Organza' | 'Linen' | string;
 
-export type SareeFabric = 'Silk' | 'Cotton' | 'Linen' | 'Chiffon' | 'Georgette' | 'Organza' | 'Tussar';
+export type SareeFabric = 'Silk' | 'Cotton' | 'Linen' | 'Chiffon' | 'Georgette' | 'Organza' | 'Tussar' | 'Velvet' | string;
 
-export type SareeColor = 'Red' | 'Pink' | 'Blue' | 'Green' | 'Yellow' | 'Black' | 'White' | 'Purple' | 'Maroon' | 'Gold' | 'Beige';
+export type SareeColor = 'Red' | 'Pink' | 'Blue' | 'Green' | 'Yellow' | 'Black' | 'White' | 'Purple' | 'Maroon' | 'Gold' | 'Beige' | string;
 
 export interface Saree {
   id: string;
   name: string;
   price: number;
+  originalPrice?: number;
   image: string;
-  category: SareeCategory | string;
-  fabric: SareeFabric | string;
-  color: SareeColor | string;
+  category: SareeCategory;
+  fabric: SareeFabric;
+  color: SareeColor;
   description: string;
   stock: number;
+  rating?: number;
+  reviewsCount?: number;
+  badge?: 'Bestseller' | 'New Launch' | 'Trending' | 'Handloom Pure Silk' | 'Limited Edition' | string;
   createdAt: string;
 }
 
@@ -59,7 +63,7 @@ export interface FilterState {
   search: string;
 }
 
-export type SortOption = 'recommended' | 'price-asc' | 'price-desc' | 'newest' | 'name-asc';
+export type SortOption = 'recommended' | 'price-asc' | 'price-desc' | 'newest' | 'name-asc' | 'rating-desc';
 
 export interface AdminStats {
   pendingOrders: number;

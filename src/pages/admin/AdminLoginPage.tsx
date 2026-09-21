@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, KeyRound } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { BRAND_INFO } from '../../config/authConfig';
 
 export const AdminLoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -43,7 +44,7 @@ export const AdminLoginPage: React.FC = () => {
           <div className="relative inline-block">
             <img
               src="/logo.jpg"
-              alt="ONLY WOMEN"
+              alt={BRAND_INFO.name}
               className="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-gold shadow-lg"
             />
             <div className="absolute -bottom-1 -right-1 bg-brand-gold text-brand-deepBurgundy p-1.5 rounded-full shadow-md">
@@ -52,11 +53,11 @@ export const AdminLoginPage: React.FC = () => {
           </div>
 
           <div>
-            <h1 className="font-serif text-2xl font-bold text-brand-burgundy uppercase tracking-wide">
-              ONLY WOMEN
+            <h1 className="font-serif text-3xl font-bold text-brand-burgundy tracking-wide">
+              {BRAND_INFO.name}
             </h1>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-gold mt-0.5">
-              Owner Access Gate
+              Owner Administration Gate
             </p>
           </div>
         </div>
@@ -92,10 +93,10 @@ export const AdminLoginPage: React.FC = () => {
           </button>
         </form>
 
-        {/* Authorization Disclaimer (Password text removed) */}
+        {/* Authorization Disclaimer */}
         <div className="pt-4 border-t border-brand-gold/20 text-center text-xs text-brand-muted">
           <p className="font-semibold text-brand-burgundy uppercase tracking-wider">
-            Authorized Owner Only
+            Authorized TrueWomen Owner Only
           </p>
         </div>
 

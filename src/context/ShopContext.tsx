@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Saree, CartItem, Order, CustomerInfo, FilterState, SortOption, OrderStatusType } from '../types';
 import * as storage from '../utils/storage';
 import { useToast } from './ToastContext';
@@ -7,11 +7,13 @@ interface ShopContextType {
   sarees: Saree[];
   cart: CartItem[];
   orders: Order[];
+  wishlist: Saree[];
   filters: FilterState;
   sortOption: SortOption;
   filteredSarees: Saree[];
   cartCount: number;
   cartTotal: number;
+  wishlistCount: number;
   
   // Actions
   setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
@@ -23,6 +25,13 @@ interface ShopContextType {
   removeItemFromCart: (sareeId: string) => void;
   changeCartQuantity: (sareeId: string, quantity: number) => void;
   emptyCart: () => void;
+
+  // Wishlist operations
+  toggleWishlist: (saree: Saree) => void;
+  isInWishlist: (sareeId: string) => boolean;
+  removeFromWishlist: (sareeId: string) => void;
+  clearWishlist: () => void;
+  moveWishlistToCart: (saree: Saree) => void;
 
   // Order operations
   placeOrder: (customer: CustomerInfo) => Order | null;
@@ -50,6 +59,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [sarees, setSarees] = useState<Saree[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [wishlist, setWishlist] = useState<Saree[]>([]);
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [sortOption, setSortOption] = useState<SortOption>('recommended');
 
@@ -58,6 +68,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSarees(storage.getSarees());
     setCart(storage.getCart());
     setOrders(storage.getOrders());
+    setWishlist(storage.getWishlist());
   }, []);
 
   // Filter & Sort Logic
@@ -124,9 +135,12 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       case 'name-asc':
         result.sort((a, b) => a.name.localeCompare(b.name));
         break;
+      case 'rating-desc':
+        result.sort((a, b) => (b.rating || 4.5) - (a.rating || 4.5));
+        break;
       case 'recommended':
       default:
-        // Keep order or sort by ID descending
+        // Keep order
         break;
     }
 
@@ -142,17 +156,54 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return cart.reduce((total, item) => total + item.saree.price * item.quantity, 0);
   }, [cart]);
 
+  // Wishlist Count
+  const wishlistCount = useMemo(() => {
+    return wishlist.length;
+  }, [wishlist]);
+
+  // Wishlist Actions
+  const toggleWishlist = (saree: Saree) => {
+    const result = storage.toggleWishlist(saree);
+    setWishlist(result.wishlist);
+    if (result.added) {
+      showToast(`Added "${saree.name}" to wishlist`, 'success');
+    } else {
+      showToast('Removed from wishlist', 'info');
+    }
+  };
+
+  const isInWishlist = (sareeId: string): boolean => {
+    return wishlist.some(s => s.id === sareeId);
+  };
+
+  const removeFromWishlist = (sareeId: string) => {
+    const updated = storage.removeFromWishlist(sareeId);
+    setWishlist(updated);
+    showToast('Removed from wishlist', 'info');
+  };
+
+  const clearWishlist = () => {
+    storage.clearWishlist();
+    setWishlist([]);
+    showToast('Wishlist cleared', 'info');
+  };
+
+  const moveWishlistToCart = (saree: Saree) => {
+    addItemToCart(saree, 1);
+    removeFromWishlist(saree.id);
+  };
+
   // Cart Actions
   const addItemToCart = (saree: Saree, quantity: number = 1) => {
     const updatedCart = storage.addToCart(saree, quantity);
     setCart(updatedCart);
-    showToast(`Added "${saree.name}" to cart`, 'success');
+    showToast(`Added "${saree.name}" to bag`, 'success');
   };
 
   const removeItemFromCart = (sareeId: string) => {
     const updatedCart = storage.removeFromCart(sareeId);
     setCart(updatedCart);
-    showToast("Saree removed from cart", 'info');
+    showToast('Saree removed from cart', 'info');
   };
 
   const changeCartQuantity = (sareeId: string, quantity: number) => {
@@ -173,13 +224,13 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Order Actions
   const placeOrder = (customer: CustomerInfo): Order | null => {
     if (cart.length === 0) {
-      showToast("Your cart is empty", 'error');
+      showToast('Your cart is empty', 'error');
       return null;
     }
     const newOrder = storage.createOrder(customer, cart, cartTotal, cartTotal);
     setOrders(storage.getOrders());
     setCart([]);
-    showToast("Order placed successfully!", 'success');
+    showToast('Order placed successfully!', 'success');
     return newOrder;
   };
 
@@ -194,16 +245,20 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Saree CRUD for Owner
   const addNewSaree = (sareeData: Omit<Saree, 'id' | 'createdAt'>): Saree => {
     const created = storage.addSaree(sareeData);
-    setSarees(storage.getSarees());
-    showToast("Saree added successfully", 'success');
+    const updatedList = storage.getSarees();
+    setSarees(updatedList);
+    showToast(`Saree "${created.name}" added to catalog!`, 'success');
     return created;
   };
 
   const editSaree = (id: string, sareeData: Partial<Saree>): Saree | null => {
     const updated = storage.updateSaree(id, sareeData);
     if (updated) {
-      setSarees(storage.getSarees());
-      showToast("Saree updated successfully", 'success');
+      const updatedList = storage.getSarees();
+      setSarees(updatedList);
+      setCart(storage.getCart());
+      setWishlist(storage.getWishlist());
+      showToast(`Saree "${updated.name}" updated successfully!`, 'success');
     }
     return updated;
   };
@@ -213,7 +268,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (deleted) {
       setSarees(storage.getSarees());
       setCart(storage.getCart());
-      showToast("Saree deleted successfully", 'info');
+      setWishlist(storage.getWishlist());
+      showToast('Saree deleted from catalog', 'info');
     }
   };
 
@@ -222,7 +278,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSarees(storage.getSarees());
     setCart([]);
     setOrders([]);
-    showToast("Demo dataset reset successfully", 'info');
+    setWishlist([]);
+    showToast('Demo dataset reset successfully', 'info');
   };
 
   return (
@@ -231,11 +288,13 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         sarees,
         cart,
         orders,
+        wishlist,
         filters,
         sortOption,
         filteredSarees,
         cartCount,
         cartTotal,
+        wishlistCount,
         setFilters,
         setSortOption,
         resetFilters,
@@ -243,6 +302,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         removeItemFromCart,
         changeCartQuantity,
         emptyCart,
+        toggleWishlist,
+        isInWishlist,
+        removeFromWishlist,
+        clearWishlist,
+        moveWishlistToCart,
         placeOrder,
         changeOrderStatus,
         addNewSaree,

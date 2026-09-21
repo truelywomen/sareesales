@@ -1,5 +1,5 @@
 /**
-  Date utilities for ONLY WOMEN order calculation & display.
+  Date utilities for TrueWomen order calculation & display.
  */
 
 export const calculateDeliveryDate = (orderDateISO: string): string => {

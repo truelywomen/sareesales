@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -16,6 +16,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useShop } from '../../context/ShopContext';
 import { ConfirmModal } from '../common/ConfirmModal';
+import { BRAND_INFO } from '../../config/authConfig';
 
 export const AdminSidebar: React.FC = () => {
   const { logout } = useAuth();
@@ -53,15 +54,15 @@ export const AdminSidebar: React.FC = () => {
         <div className="flex items-center gap-3 pb-6 mb-6 border-b border-brand-gold/30">
           <img
             src="/logo.jpg"
-            alt="ONLY WOMEN"
+            alt={BRAND_INFO.name}
             className="w-11 h-11 rounded-full object-cover border border-brand-gold"
           />
           <div>
-            <h2 className="font-serif text-lg font-bold text-brand-ivory tracking-wide uppercase">
-              ONLY WOMEN
+            <h2 className="font-serif text-lg font-bold text-brand-ivory tracking-wide">
+              {BRAND_INFO.name}
             </h2>
             <p className="text-[10px] uppercase tracking-[0.2em] text-brand-gold font-bold">
-              Owner Admin Suite
+              Owner Admin Portal
             </p>
           </div>
         </div>
@@ -122,7 +123,7 @@ export const AdminSidebar: React.FC = () => {
       <ConfirmModal
         isOpen={showResetModal}
         title="Reset Demo Data?"
-        message="This action will restore the initial 18+ sample sarees dataset and clear all customer cart and order history stored in localStorage. Are you sure?"
+        message="This action will restore the initial 18+ sample sarees dataset and clear all customer cart, wishlist and order history stored in localStorage. Are you sure?"
         confirmText="Reset Everything"
         cancelText="Cancel"
         type="warning"
@@ -143,7 +144,7 @@ export const AdminSidebar: React.FC = () => {
       <div className="lg:hidden bg-brand-deepBurgundy text-brand-ivory px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-md">
         <div className="flex items-center gap-2">
           <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-full border border-brand-gold" />
-          <span className="font-serif font-bold text-sm tracking-wider uppercase text-brand-gold">ONLY WOMEN ADMIN</span>
+          <span className="font-serif font-bold text-sm tracking-wider text-brand-gold">TRUEWOMEN ADMIN</span>
         </div>
 
         <button

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Sparkles, Mail, Phone, MapPin, Shield } from 'lucide-react';
 import { BRAND_INFO } from '../../config/authConfig';
@@ -14,26 +14,26 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-3">
               <img
                 src="/logo.jpg"
-                alt="ONLY WOMEN"
+                alt="TrueWomen"
                 className="w-12 h-12 rounded-full object-cover border border-brand-gold"
               />
               <div>
-                <h3 className="font-serif text-2xl font-bold text-brand-burgundy tracking-wide uppercase">
-                  ONLY WOMEN
+                <h3 className="font-serif text-2xl font-bold text-brand-burgundy tracking-wide">
+                  {BRAND_INFO.name}
                 </h3>
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-gold">
-                  Since 2026
+                  Luxury Handloom Sarees
                 </p>
               </div>
             </div>
             
             <p className="text-sm text-brand-charcoal/80 max-w-sm italic font-serif leading-relaxed">
-              "Elegance woven into every thread. Discover timeless Indian sarees crafted for every special occasion."
+              "Elegance woven into every thread. Discover timeless Indian sarees crafted for every celebratory moment."
             </p>
 
             <div className="flex items-center gap-2 text-xs text-brand-burgundy/80 font-medium">
               <Sparkles className="w-3.5 h-3.5 text-brand-gold" />
-              <span>Premium Frontend Saree Boutique</span>
+              <span>Authentic Indian Heritage Boutique</span>
             </div>
           </div>
 
@@ -54,18 +54,23 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/wishlist" className="hover:text-brand-rose transition-colors">
+                  Saved Wishlist
+                </Link>
+              </li>
+              <li>
                 <Link to="/orders" className="hover:text-brand-rose transition-colors">
-                  My Orders
+                  Track My Orders
                 </Link>
               </li>
               <li>
                 <Link to="/cart" className="hover:text-brand-rose transition-colors">
-                  My Cart
+                  Shopping Bag
                 </Link>
               </li>
               <li>
                 <Link to="/admin" className="hover:text-brand-rose text-xs font-semibold text-brand-gold inline-flex items-center gap-1 mt-2">
-                  <Shield className="w-3 h-3" /> Owner Admin Panel
+                  <Shield className="w-3 h-3" /> Owner Admin Portal
                 </Link>
               </li>
             </ul>
@@ -95,7 +100,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright line */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted">
-          <p>© {new Date().getFullYear()} ONLY WOMEN. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {BRAND_INFO.name}. All rights reserved.</p>
           <div className="flex items-center gap-1.5 text-brand-burgundy/80">
             <span>Crafted with</span>
             <Heart className="w-3.5 h-3.5 text-brand-rose fill-brand-rose" />

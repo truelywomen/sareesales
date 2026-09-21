@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // Context Providers
@@ -15,6 +15,7 @@ import { HomePage } from './pages/customer/HomePage';
 import { ShopPage } from './pages/customer/ShopPage';
 import { ProductDetailPage } from './pages/customer/ProductDetailPage';
 import { CartPage } from './pages/customer/CartPage';
+import { WishlistPage } from './pages/customer/WishlistPage';
 import { CheckoutPage } from './pages/customer/CheckoutPage';
 import { OrderSuccessPage } from './pages/customer/OrderSuccessPage';
 import { MyOrdersPage } from './pages/customer/MyOrdersPage';
@@ -42,6 +43,7 @@ export const App: React.FC = () => {
                 <Route index element={<HomePage />} />
                 <Route path="shop" element={<ShopPage />} />
                 <Route path="product/:id" element={<ProductDetailPage />} />
+                <Route path="wishlist" element={<WishlistPage />} />
                 <Route path="cart" element={<CartPage />} />
                 <Route path="checkout" element={<CheckoutPage />} />
                 <Route path="order-success" element={<OrderSuccessPage />} />

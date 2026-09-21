@@ -29,7 +29,7 @@ export const AdminDashboardPage: React.FC = () => {
         <div>
           <span className="text-xs font-bold uppercase tracking-widest text-brand-gold">OWNER ADMINISTRATION</span>
           <h1 className="font-serif text-3xl font-bold text-brand-burgundy">Welcome, Owner</h1>
-          <p className="text-xs text-brand-muted mt-1">Live metrics and management suite for ONLY WOMEN Saree Boutique.</p>
+          <p className="text-xs text-brand-muted mt-1">Live metrics and management suite for TrueWomen Luxury Saree Boutique.</p>
         </div>
 
         <div className="flex items-center gap-3">
