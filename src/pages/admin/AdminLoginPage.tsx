@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, KeyRound } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -96,7 +96,7 @@ export const AdminLoginPage: React.FC = () => {
         {/* Authorization Disclaimer */}
         <div className="pt-4 border-t border-brand-gold/20 text-center text-xs text-brand-muted">
           <p className="font-semibold text-brand-burgundy uppercase tracking-wider">
-            Authorized TrueWomen Owner Only
+            Authorized TruelyWomen Owner Only
           </p>
         </div>
 

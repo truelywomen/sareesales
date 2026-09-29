@@ -54,9 +54,9 @@ const ContactPage: React.FC = () => {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          subject: formData.subject || 'New Enquiry from TrueWomen Website',
+          subject: formData.subject || 'New Enquiry from TruelyWomen Website',
           message: formData.message,
-          from_name: 'TrueWomen Contact Form'
+          from_name: 'TruelyWomen Contact Form'
         })
       });
 

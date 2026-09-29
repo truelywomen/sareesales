@@ -9,7 +9,7 @@ export const STORAGE_KEYS = {
 } as const;
 
 export const BRAND_INFO = {
-  name: "TrueWomen",
+  name: "TruelyWomen",
   tagline: "Curated Luxury Sarees • Since 2026",
   heroSubtitle: "Timeless Elegance & Authentic Weaves",
   heroDesc: "Discover handpicked authentic Indian sarees crafted with pure silks, exquisite zari work, and royal heritage.",

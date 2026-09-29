@@ -109,7 +109,7 @@ export const ProductDetailPage: React.FC = () => {
             {/* Title & Brand */}
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-brand-gold">
-                TRUEWOMEN BOUTIQUE
+                TRUELYWOMEN BOUTIQUE
               </span>
               <h1 className="font-serif text-3xl sm:text-4xl font-bold text-brand-burgundy mt-1">
                 {saree.name}
@@ -256,7 +256,7 @@ export const ProductDetailPage: React.FC = () => {
           {openAccordion === 'fabric' && (
             <div className="pt-2 text-xs sm:text-sm text-brand-charcoal/80 space-y-2 leading-relaxed animate-in fade-in duration-200">
               <p>
-                Each TrueWomen saree is individually handwoven on traditional pit looms by skilled artisans with generations of weaving expertise.
+                Each TruelyWomen saree is individually handwoven on traditional pit looms by skilled artisans with generations of weaving expertise.
               </p>
               <ul className="list-disc list-inside space-y-1 text-xs text-brand-charcoal/70">
                 <li>Material: 100% genuine {saree.fabric}</li>

@@ -61,7 +61,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({ saree, isOpen, o
           <div className="p-6 sm:p-8 flex flex-col justify-between space-y-5 bg-white">
             <div className="space-y-3">
               <span className="text-[11px] font-bold uppercase tracking-widest text-brand-gold">
-                TrueWomen Boutique
+                TruelyWomen Boutique
               </span>
 
               <h2 className="font-serif text-2xl font-bold text-brand-burgundy leading-snug">

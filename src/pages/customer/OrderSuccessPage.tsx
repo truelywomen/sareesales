@@ -81,7 +81,7 @@ export const OrderSuccessPage: React.FC = () => {
           <div className="relative overflow-hidden h-6 bg-black/20 flex items-center">
             <p className="whitespace-nowrap text-[11px] font-semibold text-brand-gold/80 tracking-widest px-4"
               style={{ animation: 'tickerScroll 8s linear infinite' }}>
-              📦 &nbsp; We'll reach out soon &nbsp;•&nbsp; Thank you for shopping with TrueWomen &nbsp;•&nbsp; Estimated delivery in 7 days &nbsp;•&nbsp; 📦
+              📦 &nbsp; We'll reach out soon &nbsp;•&nbsp; Thank you for shopping with TruelyWomen &nbsp;•&nbsp; Estimated delivery in 7 days &nbsp;•&nbsp; 📦
             </p>
           </div>
         </div>
@@ -107,7 +107,7 @@ export const OrderSuccessPage: React.FC = () => {
         `}</style>
 
         <p className="text-xs text-brand-muted">
-          Thank you for shopping with <strong className="text-brand-burgundy font-serif font-bold">TrueWomen</strong>.
+          Thank you for shopping with <strong className="text-brand-burgundy font-serif font-bold">TruelyWomen</strong>.
         </p>
       </div>
 

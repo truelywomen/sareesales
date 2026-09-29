@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ArrowRight, ShieldCheck, Truck, Award, Heart } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
@@ -267,9 +267,9 @@ export const HomePage: React.FC = () => {
               <div className="w-12 h-12 rounded-full bg-brand-lightGold text-brand-burgundy mx-auto flex items-center justify-center border border-brand-gold">
                 <ShieldCheck className="w-6 h-6 text-brand-burgundy" />
               </div>
-              <h3 className="font-serif text-lg font-bold text-brand-burgundy">Direct TrueWomen Care</h3>
+              <h3 className="font-serif text-lg font-bold text-brand-burgundy">Direct TruelyWomen Care</h3>
               <p className="text-xs text-brand-charcoal/70 leading-relaxed font-sans">
-                Curated and managed exclusively by TrueWomen owner administration with prompt personal customer support.
+                Curated and managed exclusively by TruelyWomen owner administration with prompt personal customer support.
               </p>
             </div>
 

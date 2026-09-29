@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-3">
               <img
                 src="/logo.jpg"
-                alt="TrueWomen"
+                alt="TruelyWomen"
                 className="w-12 h-12 rounded-full object-cover border border-brand-gold"
               />
               <div>

@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
             <div className="relative overflow-hidden rounded-full p-0.5 border border-brand-gold/50 shadow-sm group-hover:border-brand-gold transition-colors bg-brand-lightGold/20">
               <img
                 src="/logo.jpg"
-                alt="TrueWomen Logo"
+                alt="TruelyWomen Logo"
                 className="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover transform group-hover:scale-105 transition-transform duration-300"
               />
             </div>

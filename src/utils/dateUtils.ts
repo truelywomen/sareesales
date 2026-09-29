@@ -1,5 +1,5 @@
 /**
-  Date utilities for TrueWomen order calculation & display.
+  Date utilities for TruelyWomen order calculation & display.
  */
 
 export const calculateDeliveryDate = (orderDateISO: string): string => {

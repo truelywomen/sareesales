@@ -33,7 +33,7 @@ export const MyOrdersPage: React.FC = () => {
           My Orders ({orders.length})
         </h1>
         <p className="text-xs text-brand-muted mt-1">
-          Track real-time delivery status for your TrueWomen luxury saree purchases.
+          Track real-time delivery status for your TruelyWomen luxury saree purchases.
         </p>
       </div>
 

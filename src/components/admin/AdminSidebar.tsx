@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -144,7 +144,7 @@ export const AdminSidebar: React.FC = () => {
       <div className="lg:hidden bg-brand-deepBurgundy text-brand-ivory px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-md">
         <div className="flex items-center gap-2">
           <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-full border border-brand-gold" />
-          <span className="font-serif font-bold text-sm tracking-wider text-brand-gold">TRUEWOMEN ADMIN</span>
+          <span className="font-serif font-bold text-sm tracking-wider text-brand-gold">TRUELYWOMEN ADMIN</span>
         </div>
 
         <button
