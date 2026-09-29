@@ -7,7 +7,7 @@ import { BRAND_INFO } from '../../config/authConfig';
 // Sign up at https://web3forms.com to get your Access Key.
 // Replace the access_key value below with your own key.
 // -----------------------------------------------------------
-const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_KEY_HERE';
+const WEB3FORMS_ACCESS_KEY = 'eed8ed27-138b-4f5e-a7e9-20ae1509d930';
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
