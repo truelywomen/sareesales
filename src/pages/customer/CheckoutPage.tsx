@@ -60,14 +60,14 @@ export const CheckoutPage: React.FC = () => {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       showToast('Please fix the errors in customer details form', 'error');
       return;
     }
 
-    const order = placeOrder(formData);
+    const order = await placeOrder(formData);
     if (order) {
       setPlacedOrder(order);
       setShowSuccessModal(true);

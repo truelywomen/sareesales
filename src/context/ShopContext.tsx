@@ -1,6 +1,7 @@
-﻿import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { Saree, CartItem, Order, CustomerInfo, FilterState, SortOption, OrderStatusType } from '../types';
 import * as storage from '../utils/storage';
+import * as supabaseService from '../services/supabaseService';
 import { useToast } from './ToastContext';
 
 interface ShopContextType {
@@ -14,11 +15,13 @@ interface ShopContextType {
   cartCount: number;
   cartTotal: number;
   wishlistCount: number;
+  isLoading: boolean;
   
   // Actions
   setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
   setSortOption: (option: SortOption) => void;
   resetFilters: () => void;
+  refreshData: () => Promise<void>;
   
   // Cart operations
   addItemToCart: (saree: Saree, quantity?: number) => void;
@@ -34,13 +37,13 @@ interface ShopContextType {
   moveWishlistToCart: (saree: Saree) => void;
 
   // Order operations
-  placeOrder: (customer: CustomerInfo) => Order | null;
-  changeOrderStatus: (orderId: string, status: OrderStatusType) => void;
+  placeOrder: (customer: CustomerInfo) => Promise<Order | null>;
+  changeOrderStatus: (orderId: string, status: OrderStatusType) => Promise<void>;
 
   // Admin Saree operations
-  addNewSaree: (sareeData: Omit<Saree, 'id' | 'createdAt'>) => Saree;
-  editSaree: (id: string, sareeData: Partial<Saree>) => Saree | null;
-  removeSaree: (id: string) => void;
+  addNewSaree: (sareeData: Omit<Saree, 'id' | 'createdAt'>) => Promise<Saree>;
+  editSaree: (id: string, sareeData: Partial<Saree>) => Promise<Saree | null>;
+  removeSaree: (id: string) => Promise<void>;
   resetAllDemoData: () => void;
 }
 
@@ -62,13 +65,47 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [wishlist, setWishlist] = useState<Saree[]>([]);
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [sortOption, setSortOption] = useState<SortOption>('recommended');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Initial load from storage
+  // Load live data from Supabase
+  const refreshData = async () => {
+    try {
+      setIsLoading(true);
+      const [dbSarees, dbOrders] = await Promise.all([
+        supabaseService.fetchSareesFromDb(),
+        supabaseService.fetchOrdersFromDb()
+      ]);
+
+      if (dbSarees && dbSarees.length > 0) {
+        setSarees(dbSarees);
+      } else {
+        setSarees(storage.getSarees());
+      }
+
+      if (dbOrders && dbOrders.length > 0) {
+        setOrders(dbOrders);
+      } else {
+        setOrders(storage.getOrders());
+      }
+    } catch (err) {
+      console.error('Failed to fetch from Supabase, using storage cache:', err);
+      setSarees(storage.getSarees());
+      setOrders(storage.getOrders());
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Initial load
   useEffect(() => {
+    // 1. Instantly load local data so UI is instant
     setSarees(storage.getSarees());
     setCart(storage.getCart());
     setOrders(storage.getOrders());
     setWishlist(storage.getWishlist());
+
+    // 2. Fetch fresh live data from Supabase Cloud
+    refreshData();
   }, []);
 
   // Filter & Sort Logic
@@ -134,9 +171,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         break;
       case 'name-asc':
         result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'rating-desc':
-        result.sort((a, b) => (b.rating || 4.5) - (a.rating || 4.5));
         break;
       case 'recommended':
       default:
@@ -222,7 +256,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Order Actions
-  const placeOrder = (customer: CustomerInfo): Order | null => {
+  const placeOrder = async (customer: CustomerInfo): Promise<Order | null> => {
     if (cart.length === 0) {
       showToast('Your cart is empty', 'error');
       return null;
@@ -230,45 +264,62 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const newOrder = storage.createOrder(customer, cart, cartTotal, cartTotal);
     setOrders(storage.getOrders());
     setCart([]);
+
+    // Cloud database insert
+    await supabaseService.createOrderInDb(newOrder);
+
     showToast('Order placed successfully!', 'success');
     return newOrder;
   };
 
-  const changeOrderStatus = (orderId: string, status: OrderStatusType) => {
+  const changeOrderStatus = async (orderId: string, status: OrderStatusType) => {
     const updated = storage.updateOrderStatus(orderId, status);
     if (updated) {
       setOrders(storage.getOrders());
+      await supabaseService.updateOrderStatusInDb(orderId, status);
       showToast(`Order status updated to "${status}"`, 'success');
     }
   };
 
   // Saree CRUD for Owner
-  const addNewSaree = (sareeData: Omit<Saree, 'id' | 'createdAt'>): Saree => {
+  const addNewSaree = async (sareeData: Omit<Saree, 'id' | 'createdAt'>): Promise<Saree> => {
     const created = storage.addSaree(sareeData);
     const updatedList = storage.getSarees();
     setSarees(updatedList);
+
+    // Save to Cloud Supabase DB
+    await supabaseService.createSareeInDb(created);
+
     showToast(`Saree "${created.name}" added to catalog!`, 'success');
     return created;
   };
 
-  const editSaree = (id: string, sareeData: Partial<Saree>): Saree | null => {
+  const editSaree = async (id: string, sareeData: Partial<Saree>): Promise<Saree | null> => {
     const updated = storage.updateSaree(id, sareeData);
     if (updated) {
       const updatedList = storage.getSarees();
       setSarees(updatedList);
       setCart(storage.getCart());
       setWishlist(storage.getWishlist());
+
+      // Update in Supabase Cloud DB
+      await supabaseService.updateSareeInDb(id, sareeData);
+
       showToast(`Saree "${updated.name}" updated successfully!`, 'success');
     }
     return updated;
   };
 
-  const removeSaree = (id: string) => {
+  const removeSaree = async (id: string) => {
     const deleted = storage.deleteSaree(id);
     if (deleted) {
       setSarees(storage.getSarees());
       setCart(storage.getCart());
       setWishlist(storage.getWishlist());
+
+      // Delete from Supabase Cloud DB
+      await supabaseService.deleteSareeFromDb(id);
+
       showToast('Saree deleted from catalog', 'info');
     }
   };
@@ -295,9 +346,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         cartCount,
         cartTotal,
         wishlistCount,
+        isLoading,
         setFilters,
         setSortOption,
         resetFilters,
+        refreshData,
         addItemToCart,
         removeItemFromCart,
         changeCartQuantity,

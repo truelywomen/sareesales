@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, PlusCircle, Upload, Image as ImageIcon, CheckCircle, X, Plus } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
@@ -114,7 +114,7 @@ export const AdminAddSareePage: React.FC = () => {
     return Object.keys(errs).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       showToast('Please complete all required fields', 'error');
@@ -126,7 +126,7 @@ export const AdminAddSareePage: React.FC = () => {
     const finalColor = isCustomColor ? customColor.trim() : formData.color;
     const finalBadge = formData.badge === 'None' ? undefined : formData.badge;
 
-    addNewSaree({
+    await addNewSaree({
       name: formData.name.trim(),
       price: Number(formData.price),
       originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,

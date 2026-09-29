@@ -39,8 +39,8 @@ export const AdminOrderDetailPage: React.FC = () => {
     );
   }
 
-  const handleUpdateStatus = () => {
-    changeOrderStatus(order.id, selectedStatus);
+  const handleUpdateStatus = async () => {
+    await changeOrderStatus(order.id, selectedStatus);
   };
 
   return (
