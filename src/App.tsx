@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // Context Providers
@@ -19,6 +19,7 @@ import { WishlistPage } from './pages/customer/WishlistPage';
 import { CheckoutPage } from './pages/customer/CheckoutPage';
 import { OrderSuccessPage } from './pages/customer/OrderSuccessPage';
 import { MyOrdersPage } from './pages/customer/MyOrdersPage';
+import ContactPage from './pages/customer/ContactPage';
 
 // Admin Pages
 import { AdminLoginPage } from './pages/admin/AdminLoginPage';
@@ -48,6 +49,7 @@ export const App: React.FC = () => {
                 <Route path="checkout" element={<CheckoutPage />} />
                 <Route path="order-success" element={<OrderSuccessPage />} />
                 <Route path="orders" element={<MyOrdersPage />} />
+                <Route path="contact" element={<ContactPage />} />
               </Route>
 
               {/* Owner Access Public Gateway */}

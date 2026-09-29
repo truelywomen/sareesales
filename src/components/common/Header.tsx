@@ -87,6 +87,18 @@ export const Header: React.FC = () => {
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold rounded-full" />
               )}
             </Link>
+
+            <Link
+              to="/contact"
+              className={`text-sm font-medium transition-colors tracking-wide relative py-1 ${
+                isActive('/contact') ? 'text-brand-burgundy font-bold' : 'text-brand-charcoal/80 hover:text-brand-burgundy'
+              }`}
+            >
+              Contact
+              {isActive('/contact') && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold rounded-full" />
+              )}
+            </Link>
           </nav>
 
           {/* Action Items: Wishlist & Cart */}
@@ -176,6 +188,15 @@ export const Header: React.FC = () => {
             }`}
           >
             My Orders
+          </Link>
+          <Link
+            to="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`block py-2 text-base font-medium ${
+              isActive('/contact') ? 'text-brand-burgundy font-bold border-l-4 border-brand-gold pl-3' : 'text-brand-charcoal hover:text-brand-burgundy'
+            }`}
+          >
+            Contact
           </Link>
         </div>
       )}
