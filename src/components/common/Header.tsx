@@ -1,6 +1,6 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Heart, Menu, X, Sparkles, ShieldCheck } from 'lucide-react';
+import { ShoppingBag, Heart, Menu, X, Sparkles } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { BRAND_INFO } from '../../config/authConfig';
 
@@ -89,17 +89,8 @@ export const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Action Items: Wishlist, Cart & Admin Gateway Link */}
+          {/* Action Items: Wishlist & Cart */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              to="/admin"
-              title="Owner Admin Portal"
-              className="hidden lg:flex items-center gap-1.5 text-xs text-brand-burgundy/80 hover:text-brand-burgundy bg-brand-lightGold/60 px-3 py-1.5 rounded-full border border-brand-gold/40 hover:border-brand-gold transition-all"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-brand-gold" />
-              <span>Owner Access</span>
-            </Link>
-
             {/* Wishlist Header Icon */}
             <Link
               to="/wishlist"
@@ -186,16 +177,6 @@ export const Header: React.FC = () => {
           >
             My Orders
           </Link>
-          <div className="pt-2 border-t border-brand-gold/20">
-            <Link
-              to="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 text-sm text-brand-burgundy bg-brand-lightGold/60 px-4 py-2.5 rounded-lg border border-brand-gold/40 font-medium"
-            >
-              <ShieldCheck className="w-4 h-4 text-brand-gold" />
-              <span>Owner Access Area (/admin)</span>
-            </Link>
-          </div>
         </div>
       )}
     </header>

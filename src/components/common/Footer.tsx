@@ -1,6 +1,6 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Sparkles, Mail, Phone, MapPin, Shield } from 'lucide-react';
+import { Heart, Sparkles, Mail, Phone, MapPin } from 'lucide-react';
 import { BRAND_INFO } from '../../config/authConfig';
 
 export const Footer: React.FC = () => {
@@ -66,11 +66,6 @@ export const Footer: React.FC = () => {
               <li>
                 <Link to="/cart" className="hover:text-brand-rose transition-colors">
                   Shopping Bag
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin" className="hover:text-brand-rose text-xs font-semibold text-brand-gold inline-flex items-center gap-1 mt-2">
-                  <Shield className="w-3 h-3" /> Owner Admin Portal
                 </Link>
               </li>
             </ul>
