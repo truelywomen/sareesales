@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { Saree, CartItem, Order, CustomerInfo, FilterState, SortOption, OrderStatusType, VendorStats } from '../types';
 import * as storage from '../utils/storage';
 import * as supabaseService from '../services/supabaseService';
+import { sendOrderEmailNotification } from '../services/emailService';
 import { useToast } from './ToastContext';
 
 interface ShopContextType {
@@ -276,6 +277,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Cloud database insert
     await supabaseService.createOrderInDb(newOrder);
+
+    // Send instant email notification to store owner via Web3Forms
+    sendOrderEmailNotification(newOrder).catch(err =>
+      console.warn('Failed to dispatch order notification email:', err)
+    );
 
     showToast('Order placed successfully!', 'success');
     return newOrder;

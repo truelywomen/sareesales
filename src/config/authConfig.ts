@@ -1,5 +1,6 @@
 export const OWNER_PASSWORD = "cibi@123";
 export const VENDOR_PASSWORD = "vendor@123";
+export const WEB3FORMS_ACCESS_KEY = "eed8ed27-138b-4f5e-a7e9-20ae1509d930";
 
 export const STORAGE_KEYS = {
   SAREES: "truewomen_sarees",

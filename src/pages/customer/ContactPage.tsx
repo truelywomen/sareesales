@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle2, MessageSquare, Clock, Sparkles } from 'lucide-react';
-import { BRAND_INFO } from '../../config/authConfig';
-
-// -----------------------------------------------------------
-// Web3Forms is used here — FREE, no backend needed.
-// Sign up at https://web3forms.com to get your Access Key.
-// Replace the access_key value below with your own key.
-// -----------------------------------------------------------
-const WEB3FORMS_ACCESS_KEY = 'eed8ed27-138b-4f5e-a7e9-20ae1509d930';
+import { BRAND_INFO, WEB3FORMS_ACCESS_KEY } from '../../config/authConfig';
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
