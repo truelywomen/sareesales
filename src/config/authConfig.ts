@@ -16,6 +16,6 @@ export const BRAND_INFO = {
   tagline: "Curated Luxury Sarees • Since 2026",
   heroSubtitle: "Timeless Elegance & Authentic Weaves",
   heroDesc: "Discover handpicked authentic Indian sarees crafted with pure silks, exquisite zari work, and royal heritage.",
-  contactEmail: "care@truewomen.in",
+  contactEmail: "truelywomen@gmail.com",
   contactPhone: "+91 98765 43210"
 };
