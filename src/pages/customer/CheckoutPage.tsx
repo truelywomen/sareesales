@@ -298,72 +298,53 @@ export const CheckoutPage: React.FC = () => {
 
       </form>
 
-      {/* CENTERED ORDER SUCCESS FLASH CARD MODAL */}
+      {/* CENTERED ORDER SUCCESS HIGH-ATTENTION MODAL */}
       {showSuccessModal && placedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-charcoal/70 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-2 border-brand-gold/40 text-center space-y-6 animate-in zoom-in-95 duration-200 relative overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border-2 border-brand-gold text-center space-y-6 animate-in zoom-in-95 duration-200 relative overflow-hidden">
             
-            {/* Decorative Golden Accent Line */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-gold via-amber-400 to-brand-gold" />
+            {/* Top Royal Gold Glow Line */}
+            <div className="absolute top-0 left-0 right-0 h-2.5 bg-gradient-to-r from-brand-gold via-amber-300 to-brand-gold" />
 
-            {/* Centered Green Badge Icon */}
-            <div className="mx-auto w-20 h-20 rounded-full bg-emerald-50 border-2 border-emerald-500 flex items-center justify-center shadow-lg animate-bounce">
-              <CheckCircle2 className="w-12 h-12 text-emerald-600" />
+            {/* Glowing Centered Checkmark Badge */}
+            <div className="relative mx-auto w-24 h-24 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full bg-emerald-400/30 animate-ping opacity-75" />
+              <div className="relative w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center shadow-xl border-4 border-white">
+                <CheckCircle2 className="w-12 h-12 text-white" />
+              </div>
             </div>
 
-            {/* Formal Text Message with Highlighted Banner */}
-            <div className="space-y-3">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-gold bg-brand-lightGold/80 px-3.5 py-1 rounded-full border border-brand-gold/30 inline-block">
-                <Sparkles className="w-3 h-3 inline mr-1 text-brand-burgundy" /> Order Successful
+            {/* Main Headlines */}
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-brand-gold bg-brand-deepBurgundy px-4 py-1.5 rounded-full border border-brand-gold/40 shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-brand-gold" /> Order Placed Successfully!
               </span>
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-brand-burgundy">
-                Order Placed Successfully!
+              <h3 className="font-serif text-2xl sm:text-3xl font-extrabold text-brand-burgundy tracking-tight pt-1">
+                Thank You for Your Order!
               </h3>
+            </div>
+
+            {/* 🌟 ATTENTION-GRABBING HERO CALLOUT BOX */}
+            <div className="relative overflow-hidden rounded-2xl p-5 shadow-lg border border-brand-gold/40 text-left space-y-2.5"
+              style={{ background: 'linear-gradient(135deg, #5a0b1e 0%, #80142b 50%, #5a0b1e 100%)' }}>
               
-              {/* ✨ FLASH MESSAGE CARD */}
-              <div className="relative overflow-hidden rounded-2xl shadow-lg border border-brand-gold/40"
-                style={{
-                  background: 'linear-gradient(135deg, #7c1c2e 0%, #a0283e 50%, #7c1c2e 100%)',
-                  animation: 'flashCardPulse 2.5s ease-in-out infinite',
-                }}>
-                {/* Shimmer sweep */}
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: 'linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%)',
-                    animation: 'shimmerSweep 2.2s linear infinite',
-                  }} />
-                {/* Glowing ring */}
-                <div className="absolute -top-5 -right-5 w-20 h-20 rounded-full opacity-20"
-                  style={{ background: 'radial-gradient(circle, #f5c842 0%, transparent 70%)' }} />
-
-                <div className="relative z-10 flex items-start gap-3 px-4 py-3.5">
-                  <div className="flex-shrink-0 mt-0.5 w-8 h-8 rounded-full flex items-center justify-center shadow-md"
-                    style={{ background: 'linear-gradient(135deg, #f5c842, #e2a800)', animation: 'iconPop 1.8s ease-in-out infinite' }}>
-                    <span className="text-sm">📞</span>
-                  </div>
-                  <div className="flex flex-col gap-0.5 text-left">
-                    <p className="text-xs font-bold tracking-wide text-brand-gold/90 uppercase">✦ Order Confirmed!</p>
-                    <p className="text-white font-semibold text-xs sm:text-sm leading-snug">
-                      Your order placed successfully &amp;{' '}
-                      <span className="relative inline-block">
-                        <span className="relative z-10 font-extrabold text-brand-gold"
-                          style={{ textShadow: '0 0 8px rgba(245,200,66,0.6)' }}>
-                          our team will contact you shortly!
-                        </span>
-                        <span className="absolute left-0 -bottom-0.5 w-full h-0.5 rounded-full opacity-70"
-                          style={{ background: 'linear-gradient(90deg, transparent, #f5c842, transparent)' }} />
-                      </span>
-                    </p>
-                  </div>
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-brand-gold/20 border border-brand-gold/50 flex items-center justify-center flex-shrink-0 text-xl shadow-sm">
+                  📞
                 </div>
-
-                {/* Ticker bar */}
-                <div className="relative overflow-hidden h-5 bg-black/20 flex items-center">
-                  <p className="whitespace-nowrap text-[10px] font-semibold text-brand-gold/80 tracking-widest px-3"
-                    style={{ animation: 'tickerScroll 8s linear infinite' }}>
-                    📦 &nbsp; We'll reach out soon &nbsp;•&nbsp; Thank you for shopping with TruelyWomen &nbsp;•&nbsp; Estimated delivery in 7 days &nbsp;•&nbsp; 📦
+                <div className="space-y-1">
+                  <p className="text-xs uppercase font-extrabold tracking-wider text-brand-gold">
+                    Important Notice
+                  </p>
+                  <p className="text-white font-bold text-sm sm:text-base leading-snug">
+                    Our team will contact you shortly to confirm your saree order &amp; delivery address!
                   </p>
                 </div>
+              </div>
+
+              <div className="pt-2 border-t border-white/15 flex items-center justify-between text-xs text-brand-gold/90 font-medium">
+                <span>🚚 Estimated Delivery: <strong>7 Days</strong></span>
+                <span>📦 Safe Doorstep Delivery</span>
               </div>
             </div>
 
@@ -371,35 +352,33 @@ export const CheckoutPage: React.FC = () => {
             <div className="bg-brand-cream/60 rounded-2xl p-4 border border-brand-gold/30 text-left text-xs space-y-2.5">
               <div className="flex justify-between items-center pb-2 border-b border-brand-gold/20">
                 <span className="text-brand-muted uppercase font-bold tracking-wider">Order ID</span>
-                <span className="font-serif font-bold text-brand-burgundy text-sm">{placedOrder.id}</span>
+                <span className="font-mono font-bold text-brand-burgundy text-sm bg-brand-lightGold/60 px-2 py-0.5 rounded border border-brand-gold/30">
+                  {placedOrder.id}
+                </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-brand-muted font-medium">Customer Name</span>
-                <span className="font-bold text-brand-charcoal">{placedOrder.customer.name}</span>
+                <span className="text-brand-muted font-medium">Customer</span>
+                <span className="font-bold text-brand-charcoal">{placedOrder.customer.name} ({placedOrder.customer.phone})</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-brand-muted font-medium">Total Amount</span>
-                <span className="font-bold text-brand-burgundy text-sm">{formatPrice(placedOrder.total)}</span>
-              </div>
-              <div className="flex justify-between items-center pt-2 border-t border-brand-gold/20">
-                <span className="text-brand-muted font-medium">Expected Delivery</span>
-                <span className="font-bold text-emerald-700">{formatDate(placedOrder.expectedDelivery)}</span>
+                <span className="font-serif font-bold text-brand-burgundy text-base">{formatPrice(placedOrder.total)}</span>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+            <div className="flex flex-col sm:flex-row items-center gap-3 pt-1">
               <button
                 type="button"
                 onClick={() => navigate('/order-success', { state: { orderId: placedOrder.id } })}
-                className="w-full inline-flex items-center justify-center gap-2 bg-brand-burgundy hover:bg-brand-wine text-white py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm shadow-md transition-all border border-brand-gold/40 cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 bg-brand-burgundy hover:bg-brand-wine text-white py-3.5 px-5 rounded-2xl font-bold text-xs sm:text-sm shadow-md transition-all border border-brand-gold/40 cursor-pointer active:scale-98"
               >
-                <span>View Order Details</span>
+                <span>View Full Order Details</span>
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/shop')}
-                className="w-full inline-flex items-center justify-center gap-2 bg-brand-ivory hover:bg-brand-cream text-brand-burgundy py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm border border-brand-gold/40 transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 bg-brand-ivory hover:bg-brand-cream text-brand-burgundy py-3.5 px-5 rounded-2xl font-bold text-xs sm:text-sm border border-brand-gold/40 transition-all cursor-pointer active:scale-98"
               >
                 <span>Continue Shopping</span>
               </button>
