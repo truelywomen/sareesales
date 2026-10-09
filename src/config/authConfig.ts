@@ -1,11 +1,13 @@
 export const OWNER_PASSWORD = "cibi@123";
+export const VENDOR_PASSWORD = "vendor@123";
 
 export const STORAGE_KEYS = {
   SAREES: "truewomen_sarees",
   CART: "truewomen_cart",
   ORDERS: "truewomen_orders",
   WISHLIST: "truewomen_wishlist",
-  ADMIN_AUTH: "truewomen_admin_auth"
+  ADMIN_AUTH: "truewomen_admin_auth",
+  VENDOR_PROFILE: "truewomen_vendor_profile"
 } as const;
 
 export const BRAND_INFO = {

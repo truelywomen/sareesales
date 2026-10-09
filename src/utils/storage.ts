@@ -1,4 +1,4 @@
-﻿import { Saree, CartItem, Order, CustomerInfo, OrderStatusType } from '../types';
+import { Saree, CartItem, Order, CustomerInfo, OrderStatusType } from '../types';
 import { STORAGE_KEYS } from '../config/authConfig';
 import { INITIAL_SAREES } from '../data/sampleSarees';
 import { calculateDeliveryDate } from './dateUtils';
@@ -68,11 +68,33 @@ export const addSaree = (newSareeData: Omit<Saree, 'id' | 'createdAt'>): Saree =
     createdAt: new Date().toISOString(),
     rating: newSareeData.rating || 5.0,
     reviewsCount: newSareeData.reviewsCount || 1,
-    badge: newSareeData.badge || 'New Launch'
+    badge: newSareeData.badge || (newSareeData.approvalStatus === 'pending' ? undefined : 'New Launch'),
+    approvalStatus: newSareeData.approvalStatus || 'approved',
+    vendorName: newSareeData.vendorName,
+    vendorEmail: newSareeData.vendorEmail,
+    vendorPrice: newSareeData.vendorPrice,
+    adminNotes: newSareeData.adminNotes,
+    approvedAt: newSareeData.approvalStatus === 'approved' ? new Date().toISOString() : undefined
   };
   const updated = [newSaree, ...sarees];
   setItem(STORAGE_KEYS.SAREES, updated);
   return newSaree;
+};
+
+export const approveSaree = (id: string, fixedPrice: number, originalPrice?: number): Saree | null => {
+  return updateSaree(id, {
+    approvalStatus: 'approved',
+    price: fixedPrice,
+    originalPrice: originalPrice || undefined,
+    approvedAt: new Date().toISOString()
+  });
+};
+
+export const rejectSaree = (id: string, notes?: string): Saree | null => {
+  return updateSaree(id, {
+    approvalStatus: 'rejected',
+    adminNotes: notes || 'Rejected by Admin'
+  });
 };
 
 export const updateSaree = (id: string, updatedData: Partial<Saree>): Saree | null => {
@@ -269,6 +291,35 @@ export const setAdminAuthStatus = (isAuthenticated: boolean): void => {
     }
   } catch (error) {
     console.error("Session storage error:", error);
+  }
+};
+
+export const getVendorProfile = (): { username: string; email: string; isLoggedIn: boolean } | null => {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEYS.VENDOR_PROFILE);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+};
+
+export const setVendorProfile = (profile: { username: string; email: string; phone?: string }): void => {
+  try {
+    sessionStorage.setItem(
+      STORAGE_KEYS.VENDOR_PROFILE,
+      JSON.stringify({ ...profile, isLoggedIn: true })
+    );
+  } catch (error) {
+    console.error("Session storage error saving vendor:", error);
+  }
+};
+
+export const clearVendorProfile = (): void => {
+  try {
+    sessionStorage.removeItem(STORAGE_KEYS.VENDOR_PROFILE);
+  } catch (error) {
+    console.error("Session storage error removing vendor:", error);
   }
 };
 

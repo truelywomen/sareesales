@@ -15,24 +15,41 @@ const mapRowToSaree = (row: any): Saree => ({
   description: row.description,
   stock: row.stock ?? 1,
   badge: row.badge ?? undefined,
-  createdAt: row.created_at || new Date().toISOString()
+  createdAt: row.created_at || new Date().toISOString(),
+  approvalStatus: row.approval_status || 'approved',
+  vendorName: row.vendor_name || undefined,
+  vendorEmail: row.vendor_email || undefined,
+  vendorPrice: row.vendor_price ? Number(row.vendor_price) : undefined,
+  adminNotes: row.admin_notes || undefined,
+  approvedAt: row.approved_at || undefined
 });
 
 // Helper to map Saree to DB row
-const mapSareeToRow = (saree: Saree) => ({
-  id: saree.id,
-  name: saree.name,
-  price: saree.price,
-  original_price: saree.originalPrice || null,
-  image: saree.image,
-  category: saree.category,
-  fabric: saree.fabric,
-  color: saree.color,
-  description: saree.description,
-  stock: saree.stock ?? 1,
-  badge: saree.badge || null,
-  created_at: saree.createdAt || new Date().toISOString()
-});
+const mapSareeToRow = (saree: Saree) => {
+  const row: any = {
+    id: saree.id,
+    name: saree.name,
+    price: saree.price,
+    original_price: saree.originalPrice || null,
+    image: saree.image,
+    category: saree.category,
+    fabric: saree.fabric,
+    color: saree.color,
+    description: saree.description,
+    stock: saree.stock ?? 1,
+    badge: saree.badge || null,
+    created_at: saree.createdAt || new Date().toISOString()
+  };
+
+  if (saree.approvalStatus) row.approval_status = saree.approvalStatus;
+  if (saree.vendorName) row.vendor_name = saree.vendorName;
+  if (saree.vendorEmail) row.vendor_email = saree.vendorEmail;
+  if (saree.vendorPrice !== undefined) row.vendor_price = saree.vendorPrice;
+  if (saree.adminNotes) row.admin_notes = saree.adminNotes;
+  if (saree.approvedAt) row.approved_at = saree.approvedAt;
+
+  return row;
+};
 
 // Helper to map DB row to Order model
 const mapRowToOrder = (row: any): Order => ({
@@ -118,6 +135,12 @@ export const updateSareeInDb = async (id: string, updates: Partial<Saree>): Prom
     if (updates.description !== undefined) dbUpdates.description = updates.description;
     if (updates.stock !== undefined) dbUpdates.stock = updates.stock;
     if (updates.badge !== undefined) dbUpdates.badge = updates.badge;
+    if (updates.approvalStatus !== undefined) dbUpdates.approval_status = updates.approvalStatus;
+    if (updates.vendorName !== undefined) dbUpdates.vendor_name = updates.vendorName;
+    if (updates.vendorEmail !== undefined) dbUpdates.vendor_email = updates.vendorEmail;
+    if (updates.vendorPrice !== undefined) dbUpdates.vendor_price = updates.vendorPrice;
+    if (updates.adminNotes !== undefined) dbUpdates.admin_notes = updates.adminNotes;
+    if (updates.approvedAt !== undefined) dbUpdates.approved_at = updates.approvedAt;
 
     const { data, error } = await supabase
       .from('sarees')

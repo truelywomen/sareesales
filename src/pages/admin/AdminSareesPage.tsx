@@ -7,23 +7,24 @@ import { ConfirmModal } from '../../components/common/ConfirmModal';
 import { FALLBACK_SAREE_IMAGE } from '../../data/sampleSarees';
 
 export const AdminSareesPage: React.FC = () => {
-  const { sarees, removeSaree } = useShop();
+  const { allSarees, removeSaree } = useShop();
 
   const [search, setSearch] = useState('');
   const [selectedFabric, setSelectedFabric] = useState('All');
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
-  const sareeToDelete = sarees.find(s => s.id === deleteTargetId);
+  const sareeToDelete = allSarees.find(s => s.id === deleteTargetId);
 
   const fabrics = useMemo(() => {
-    return ['All', ...Array.from(new Set(sarees.map(s => s.fabric)))];
-  }, [sarees]);
+    return ['All', ...Array.from(new Set(allSarees.map(s => s.fabric)))];
+  }, [allSarees]);
 
   const filteredList = useMemo(() => {
-    return sarees.filter(s => {
+    return allSarees.filter(s => {
       const matchSearch =
         s.name.toLowerCase().includes(search.toLowerCase().trim()) ||
         s.id.toLowerCase().includes(search.toLowerCase().trim()) ||
+        (s.vendorName && s.vendorName.toLowerCase().includes(search.toLowerCase().trim())) ||
         s.category.toLowerCase().includes(search.toLowerCase().trim()) ||
         s.fabric.toLowerCase().includes(search.toLowerCase().trim());
 
@@ -31,7 +32,7 @@ export const AdminSareesPage: React.FC = () => {
 
       return matchSearch && matchFabric;
     });
-  }, [sarees, search, selectedFabric]);
+  }, [allSarees, search, selectedFabric]);
 
   const handleConfirmDelete = async () => {
     if (deleteTargetId) {
@@ -47,7 +48,7 @@ export const AdminSareesPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-brand-gold/30 shadow-card">
         <div>
           <h1 className="font-serif text-3xl font-bold text-brand-burgundy">
-            Saree Catalog Management ({sarees.length})
+            Saree Catalog Management ({allSarees.length})
           </h1>
           <p className="text-xs text-brand-muted mt-1">
             Publish, edit prices, update stock, or remove sarees from the customer store in real time.
@@ -120,8 +121,18 @@ export const AdminSareesPage: React.FC = () => {
                           <span>{saree.name}</span>
                           <ExternalLink className="w-3 h-3 text-brand-gold opacity-60" />
                         </Link>
-                        <div className="flex items-center gap-1.5 mt-0.5">
+                        <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
                           <span className="text-[10px] text-brand-muted font-mono">{saree.id}</span>
+                          {saree.vendorName && (
+                            <span className="text-[9px] bg-brand-lightGold/70 text-brand-burgundy px-1.5 py-0.2 rounded font-bold border border-brand-gold/30">
+                              Vendor: {saree.vendorName}
+                            </span>
+                          )}
+                          {saree.approvalStatus === 'pending' && (
+                            <span className="text-[9px] bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded font-bold">
+                              In Review
+                            </span>
+                          )}
                           {saree.badge && (
                             <span className="text-[9px] bg-brand-burgundy text-brand-gold px-1.5 py-0.2 rounded font-bold">
                               {saree.badge}

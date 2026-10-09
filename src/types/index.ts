@@ -4,6 +4,8 @@ export type SareeFabric = 'Silk' | 'Cotton' | 'Linen' | 'Chiffon' | 'Georgette' 
 
 export type SareeColor = 'Red' | 'Pink' | 'Blue' | 'Green' | 'Yellow' | 'Black' | 'White' | 'Purple' | 'Maroon' | 'Gold' | 'Beige' | string;
 
+export type SareeApprovalStatus = 'approved' | 'pending' | 'rejected';
+
 export interface Saree {
   id: string;
   name: string;
@@ -19,6 +21,34 @@ export interface Saree {
   reviewsCount?: number;
   badge?: 'Bestseller' | 'New Launch' | 'Trending' | 'Handloom Pure Silk' | 'Limited Edition' | string;
   createdAt: string;
+  
+  // Vendor & Approval Fields
+  approvalStatus?: SareeApprovalStatus;
+  vendorName?: string;
+  vendorEmail?: string;
+  vendorPrice?: number; // Vendor Quoted Cost / Wholesale Cost
+  adminNotes?: string;
+  approvedAt?: string;
+}
+
+export interface VendorProfile {
+  username: string;
+  email: string;
+  phone?: string;
+  isLoggedIn: boolean;
+}
+
+export interface VendorStats {
+  vendorName: string;
+  vendorEmail: string;
+  totalSubmitted: number;
+  approvedCount: number;
+  pendingCount: number;
+  rejectedCount: number;
+  totalStock: number;
+  sareesSold: number;
+  totalSalesValue: number;
+  totalVendorCost: number;
 }
 
 export interface CartItem {

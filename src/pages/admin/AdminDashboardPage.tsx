@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Clock, ShoppingBag, CheckCircle, Package, TrendingUp, Calendar, ArrowRight, Plus } from 'lucide-react';
+import { Clock, ShoppingBag, CheckCircle, Package, TrendingUp, Calendar, ArrowRight, Plus, CheckSquare, Users } from 'lucide-react';
 import { useShop } from '../../context/ShopContext';
 import { StatsCard } from '../../components/admin/StatsCard';
 import { formatPrice } from '../../utils/formatters';
 import { formatDate, isToday } from '../../utils/dateUtils';
 
 export const AdminDashboardPage: React.FC = () => {
-  const { sarees, orders } = useShop();
+  const { sarees, allSarees, orders, getVendorStatsList } = useShop();
 
   // Dynamic statistics calculations
   const totalOrders = orders.length;
@@ -19,6 +19,10 @@ export const AdminDashboardPage: React.FC = () => {
     .filter(o => o.status === 'Delivered')
     .reduce((sum, o) => sum + o.total, 0);
 
+  const pendingApprovals = allSarees.filter(s => s.approvalStatus === 'pending').length;
+  const vendorStats = getVendorStatsList();
+  const totalVendors = vendorStats.length;
+
   const recentOrders = orders.slice(0, 5);
 
   return (
@@ -29,10 +33,20 @@ export const AdminDashboardPage: React.FC = () => {
         <div>
           <span className="text-xs font-bold uppercase tracking-widest text-brand-gold">OWNER ADMINISTRATION</span>
           <h1 className="font-serif text-3xl font-bold text-brand-burgundy">Welcome, Owner</h1>
-          <p className="text-xs text-brand-muted mt-1">Live metrics and management suite for TrueWomen Luxury Saree Boutique.</p>
+          <p className="text-xs text-brand-muted mt-1">Live metrics and management suite for TruelyWomen Luxury Saree Boutique.</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {pendingApprovals > 0 && (
+            <Link
+              to="/admin/vendor-approvals"
+              className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-md transition-all animate-pulse"
+            >
+              <CheckSquare className="w-4 h-4" />
+              <span>Review {pendingApprovals} Vendor Saree{pendingApprovals > 1 ? 's' : ''}</span>
+            </Link>
+          )}
+
           <Link
             to="/admin/sarees/add"
             className="inline-flex items-center gap-2 bg-brand-burgundy hover:bg-brand-wine text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md border border-brand-gold/40 transition-all"
@@ -52,13 +66,37 @@ export const AdminDashboardPage: React.FC = () => {
       </div>
 
       {/* Stats Grid (Calculated dynamically) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatsCard
           title="Pending Orders"
           value={pendingOrders}
           icon={Clock}
           color="amber"
           subtitle="Action required for delivery"
+        />
+
+        <StatsCard
+          title="Vendor Approvals"
+          value={pendingApprovals}
+          icon={CheckSquare}
+          color={pendingApprovals > 0 ? "rose" : "gold"}
+          subtitle="Pending wholesale review"
+        />
+
+        <StatsCard
+          title="Salespersons"
+          value={totalVendors}
+          icon={Users}
+          color="blue"
+          subtitle="Active partner suppliers"
+        />
+
+        <StatsCard
+          title="Total Sarees Live"
+          value={totalSarees}
+          icon={ShoppingBag}
+          color="gold"
+          subtitle="Active catalog items"
         />
         
         <StatsCard
@@ -78,14 +116,6 @@ export const AdminDashboardPage: React.FC = () => {
         />
 
         <StatsCard
-          title="Total Sarees"
-          value={totalSarees}
-          icon={ShoppingBag}
-          color="gold"
-          subtitle="Active catalog items"
-        />
-
-        <StatsCard
           title="Delivered Orders"
           value={deliveredOrders}
           icon={CheckCircle}
@@ -97,7 +127,7 @@ export const AdminDashboardPage: React.FC = () => {
           title="Total Sales Revenue"
           value={formatPrice(totalSales)}
           icon={TrendingUp}
-          color="blue"
+          color="emerald"
           subtitle="Sum of delivered orders"
         />
       </div>

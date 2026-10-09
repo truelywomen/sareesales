@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Saree, CartItem, Order, CustomerInfo, FilterState, SortOption, OrderStatusType } from '../types';
+import { Saree, CartItem, Order, CustomerInfo, FilterState, SortOption, OrderStatusType, VendorStats } from '../types';
 import * as storage from '../utils/storage';
 import * as supabaseService from '../services/supabaseService';
 import { useToast } from './ToastContext';
 
 interface ShopContextType {
-  sarees: Saree[];
+  sarees: Saree[];         // Approved sarees for customer store
+  allSarees: Saree[];      // All sarees (approved, pending, rejected) for Admin & Vendors
   cart: CartItem[];
   orders: Order[];
   wishlist: Saree[];
@@ -45,6 +46,12 @@ interface ShopContextType {
   editSaree: (id: string, sareeData: Partial<Saree>) => Promise<Saree | null>;
   removeSaree: (id: string) => Promise<void>;
   resetAllDemoData: () => void;
+
+  // Vendor & Approval Operations
+  addVendorSaree: (sareeData: Omit<Saree, 'id' | 'createdAt'>) => Promise<Saree>;
+  approveVendorSaree: (id: string, fixedPrice: number, originalPrice?: number) => Promise<Saree | null>;
+  rejectVendorSaree: (id: string, reason?: string) => Promise<Saree | null>;
+  getVendorStatsList: () => VendorStats[];
 }
 
 const initialFilters: FilterState = {
@@ -59,13 +66,18 @@ const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { showToast } = useToast();
-  const [sarees, setSarees] = useState<Saree[]>([]);
+  const [allSarees, setAllSarees] = useState<Saree[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [wishlist, setWishlist] = useState<Saree[]>([]);
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [sortOption, setSortOption] = useState<SortOption>('recommended');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Approved sarees visible to customers on the store
+  const sarees = useMemo(() => {
+    return allSarees.filter(s => !s.approvalStatus || s.approvalStatus === 'approved');
+  }, [allSarees]);
 
   // Load live data from Supabase
   const refreshData = async () => {
@@ -77,9 +89,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       ]);
 
       if (dbSarees && dbSarees.length > 0) {
-        setSarees(dbSarees);
+        setAllSarees(dbSarees);
       } else {
-        setSarees(storage.getSarees());
+        setAllSarees(storage.getSarees());
       }
 
       if (dbOrders && dbOrders.length > 0) {
@@ -89,7 +101,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (err) {
       console.error('Failed to fetch from Supabase, using storage cache:', err);
-      setSarees(storage.getSarees());
+      setAllSarees(storage.getSarees());
       setOrders(storage.getOrders());
     } finally {
       setIsLoading(false);
@@ -98,17 +110,15 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Initial load
   useEffect(() => {
-    // 1. Instantly load local data so UI is instant
-    setSarees(storage.getSarees());
+    setAllSarees(storage.getSarees());
     setCart(storage.getCart());
     setOrders(storage.getOrders());
     setWishlist(storage.getWishlist());
 
-    // 2. Fetch fresh live data from Supabase Cloud
     refreshData();
   }, []);
 
-  // Filter & Sort Logic
+  // Filter & Sort Logic (Customer facing - uses only approved sarees)
   const filteredSarees = useMemo(() => {
     let result = [...sarees];
 
@@ -174,7 +184,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         break;
       case 'recommended':
       default:
-        // Keep order
         break;
     }
 
@@ -283,14 +292,19 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Saree CRUD for Owner
   const addNewSaree = async (sareeData: Omit<Saree, 'id' | 'createdAt'>): Promise<Saree> => {
-    const created = storage.addSaree(sareeData);
+    const dataWithApproval = {
+      ...sareeData,
+      approvalStatus: sareeData.approvalStatus || 'approved',
+      vendorName: sareeData.vendorName || 'In-House Admin'
+    };
+    const created = storage.addSaree(dataWithApproval);
     const updatedList = storage.getSarees();
-    setSarees(updatedList);
+    setAllSarees(updatedList);
 
     // Save to Cloud Supabase DB
     await supabaseService.createSareeInDb(created);
 
-    showToast(`Saree "${created.name}" added to catalog!`, 'success');
+    showToast(`Saree "${created.name}" published to catalog!`, 'success');
     return created;
   };
 
@@ -298,7 +312,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const updated = storage.updateSaree(id, sareeData);
     if (updated) {
       const updatedList = storage.getSarees();
-      setSarees(updatedList);
+      setAllSarees(updatedList);
       setCart(storage.getCart());
       setWishlist(storage.getWishlist());
 
@@ -313,7 +327,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const removeSaree = async (id: string) => {
     const deleted = storage.deleteSaree(id);
     if (deleted) {
-      setSarees(storage.getSarees());
+      setAllSarees(storage.getSarees());
       setCart(storage.getCart());
       setWishlist(storage.getWishlist());
 
@@ -324,9 +338,114 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  // Vendor Submissions & Approvals
+  const addVendorSaree = async (sareeData: Omit<Saree, 'id' | 'createdAt'>): Promise<Saree> => {
+    const vendorSareeData = {
+      ...sareeData,
+      approvalStatus: 'pending' as const,
+      price: sareeData.price || sareeData.vendorPrice || 0
+    };
+    const created = storage.addSaree(vendorSareeData);
+    const updatedList = storage.getSarees();
+    setAllSarees(updatedList);
+
+    // Save to Cloud Supabase DB
+    await supabaseService.createSareeInDb(created);
+
+    showToast(`Saree "${created.name}" submitted for Admin review!`, 'success');
+    return created;
+  };
+
+  const approveVendorSaree = async (id: string, fixedPrice: number, originalPrice?: number): Promise<Saree | null> => {
+    const updated = storage.approveSaree(id, fixedPrice, originalPrice);
+    if (updated) {
+      const updatedList = storage.getSarees();
+      setAllSarees(updatedList);
+
+      // Sync to Supabase
+      await supabaseService.updateSareeInDb(id, {
+        approvalStatus: 'approved',
+        price: fixedPrice,
+        originalPrice: originalPrice || undefined,
+        approvedAt: new Date().toISOString()
+      });
+
+      showToast(`Saree approved and listed at ₹${fixedPrice.toLocaleString('en-IN')}!`, 'success');
+    }
+    return updated;
+  };
+
+  const rejectVendorSaree = async (id: string, reason?: string): Promise<Saree | null> => {
+    const updated = storage.rejectSaree(id, reason);
+    if (updated) {
+      const updatedList = storage.getSarees();
+      setAllSarees(updatedList);
+
+      // Sync to Supabase
+      await supabaseService.updateSareeInDb(id, {
+        approvalStatus: 'rejected',
+        adminNotes: reason || 'Rejected by Admin'
+      });
+
+      showToast('Saree submission rejected', 'info');
+    }
+    return updated;
+  };
+
+  // Calculate Vendor / Salesperson Monitoring statistics
+  const getVendorStatsList = (): VendorStats[] => {
+    const vendorMap: Record<string, VendorStats> = {};
+
+    allSarees.forEach(s => {
+      const vendorName = s.vendorName || (s.vendorEmail ? s.vendorEmail.split('@')[0] : 'In-House / Admin');
+      const vendorEmail = s.vendorEmail || 'direct@truewomen.in';
+
+      if (!vendorMap[vendorName]) {
+        vendorMap[vendorName] = {
+          vendorName,
+          vendorEmail,
+          totalSubmitted: 0,
+          approvedCount: 0,
+          pendingCount: 0,
+          rejectedCount: 0,
+          totalStock: 0,
+          sareesSold: 0,
+          totalSalesValue: 0,
+          totalVendorCost: 0
+        };
+      }
+
+      const st = vendorMap[vendorName];
+      st.totalSubmitted += 1;
+      if (s.approvalStatus === 'approved' || !s.approvalStatus) {
+        st.approvedCount += 1;
+        st.totalStock += s.stock || 0;
+      } else if (s.approvalStatus === 'pending') {
+        st.pendingCount += 1;
+      } else if (s.approvalStatus === 'rejected') {
+        st.rejectedCount += 1;
+      }
+
+      // Check sales from orders
+      orders.forEach(order => {
+        order.items.forEach(item => {
+          if (item.saree.id === s.id) {
+            st.sareesSold += item.quantity;
+            st.totalSalesValue += item.saree.price * item.quantity;
+            if (s.vendorPrice) {
+              st.totalVendorCost += s.vendorPrice * item.quantity;
+            }
+          }
+        });
+      });
+    });
+
+    return Object.values(vendorMap);
+  };
+
   const resetAllDemoData = () => {
     storage.resetDemoData();
-    setSarees(storage.getSarees());
+    setAllSarees(storage.getSarees());
     setCart([]);
     setOrders([]);
     setWishlist([]);
@@ -337,6 +456,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <ShopContext.Provider
       value={{
         sarees,
+        allSarees,
         cart,
         orders,
         wishlist,
@@ -365,7 +485,11 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addNewSaree,
         editSaree,
         removeSaree,
-        resetAllDemoData
+        resetAllDemoData,
+        addVendorSaree,
+        approveVendorSaree,
+        rejectVendorSaree,
+        getVendorStatsList
       }}
     >
       {children}
